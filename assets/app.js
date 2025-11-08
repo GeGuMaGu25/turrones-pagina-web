@@ -1,4 +1,10 @@
 /*ux*/
+// 👇 Pon esto arriba del archivo (debajo de tus utilidades si quieres)
+const API_BASE =
+  location.hostname === "localhost" || location.hostname === "127.0.0.1"
+    ? "http://localhost:4000"
+    : "https://turrones-pagina-web-production.up.railway.app";
+
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
@@ -102,17 +108,17 @@ payBtn.addEventListener('click', async () => {
   for (const [id, qty] of cartMap.entries()) items.push({ id, qty });
 
   try {
-    const resp = await fetch('http://localhost:4000/api/orders/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        items,
-        customer: {
-          name: document.querySelector('#name')?.value || '',
-          phone: document.querySelector('#phone')?.value || ''
-        }
-      })
-    });
+    const resp = await fetch(`${API_BASE}/api/orders/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          customer: {
+            name: document.querySelector('#name')?.value || '',
+            phone: document.querySelector('#phone')?.value || ''
+          }
+        })
+      });      
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Error en checkout');
     window.location.href = data.whatsappUrl; // redirige a WhatsApp
