@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Turrones Yesi - Dulce tradicion</title>
+    <meta name="description" content="Turrones de diversos sabores de las marcas mas queridas" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href ="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css" />
+</head>
+
+<body>
+    <header class="site-header" id="top">
+        <a class="brand" href="#top" aria-label="Inicio">
+            <img src="logo.png" alt="YESI Turrones" class="brand-logo" />
+        </a>
+
+        <nav class="nav">
+            <a href="#productos">Productos</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#contacto">Contacto</a>
+
+            <button class="cart" id="cartBtn" aria-label="Ver carrito">
+                <span>Carrito</span>
+                <span class="cart-count" id="cartCount" aria-live="polite">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" aria-label="Hero">
+            <div class="hero-content">
+                <h1>Dulzura en cada bocado</h1>
+                <p>Turrones de las marcas que más escogen las familias peruanas. Contamos con envios gratis bajo cobertura.</p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="#productos">Comprar ahora</a>
+                    <a class="btn ghost" href="#nosotros">Conocer más</a>
+                </div>
+            </div>
+
+            <figure class="hero-figure" aria-hidden="true">
+                <img src="banner.png" alt="" />
+            </figure>
+        </section>
+
+        <section id="productos" class="section">
+            <div class="section-head">
+                <h2>Productos</h2>
+                <p>De la mejor calidad y originales.</p>
+            </div>
+
+            <div class="grid">
+                <!--Aca va el producto 1-->
+                <article class="card">
+                    <img src="joel.png" alt="" />
+                    <div class="card-body">
+                        <h3>Turrón Tradicional Calderón 900gr</h3>
+                        <p>Dulce, suave y con mucha miel.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 23.00</span>
+                            <button class="btn small" data-sku="calderon" data-product="Turrón Tradicional Calderón 900gr" data-price="23.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Aca va el producto 2-->
+                <article class="card">
+                    <img src="calderon.png" alt="" />
+                    <div class="card-body">
+                        <h3>Turrón tradicional Joel 900gr</h3>
+                        <p>Miel de calidad, suave y dulce.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 23.00</span>
+                            <button class="btn small" data-sku="joel" data-product="Turrón tradicional Joel 900gr" data-price="23.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Aca va el producto 3-->
+                <article class="card">
+                    <img src="galleta.png" alt="" />
+                    <div class="card-body">
+                        <h3>Galleta de agua chinchana</h3>
+                        <p>Ricas y crujientes.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 6.00</span>
+                            <button class="btn small" data-sku="galleta" data-product="Galleta de agua chinchana" data-price="6.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="nosotros" class="section">
+            <div class="section-head">
+                <h2>Nosotros</h2>
+                <p>Pequeño emprendimiento con el fin de facilitar y propiciar el consumo del producto nacional delicioso, el turrón.</p>
+            </div>
+
+            <div class="about">
+                <p>
+                    Creemos en que todos los peruanos deben comer turrón. Solo
+                    ofrecemos las mejores marcas y los mejores sabores. Ofrecemos
+                    garantía y calidad de servicio en cada pedido.
+                </p>
+            </div>
+        </section>
+
+        <section id="contacto" class="section contacto">
+            <div class="section-head">
+                <h2>Contacto</h2>
+                <p>Haz tu pedido o consulta disponibilidad sin compromiso.</p>
+            </div>
+
+            <form id="contactoForm" class="form" aria-labelledby="contacto">
+                <div class="field">
+                    <label for="name">Nombre</label>
+                    <input id="name" name="name" type="text" placeholder="Tu nombre" required> 
+                </div>
+
+                <div class="field">
+                    <label for="email">Correo</label>
+                    <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+
+                <div class="field">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" rows="4" placeholder="¿Qué necesitas?" required></textarea>
+                </div>
+
+                <button class="btn primary" type="submit">Enviar</button>
+                <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>© <span id="year"></span> Turrones Yesi. Todos los derechos reservados.</p>
+        <a class="link" href="#top">Volver arriba ↑</a>
+    </footer>
+
+    <script src="assets/app.js" defer></script>
+</body>
+</html>
