@@ -1,0 +1,6 @@
+[
+    { "id": "calderon",   "sku": "calderon",   "name": "Turrón Tradicional Calderón 900gr",     "price_cents": 2300, "currency": "PEN", "stock": 25 },
+    { "id": "joel",   "sku": "joel",   "name": "Turrón Tradicional Joel 900gr","price_cents": 2300, "currency": "PEN", "stock": 18 },
+    { "id": "galleta", "sku": "galleta", "name": "Galleta de Agua Chinchana",  "price_cents": 600, "currency": "PEN", "stock": 12 }
+  ]
+  
