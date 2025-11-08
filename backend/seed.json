@@ -1,0 +1,20 @@
+{
+    "products": [
+      {
+        "name": "Turrón Tradicional Calderón 900gr",
+        "description": "Dulce, suave y con mucha miel.",
+        "price": 23.00
+      },
+      {
+        "name": "Turrón tradicional Joel 900gr",
+        "description": "Miel de calidad, suave y dulce.",
+        "price": 23.00
+      },
+      {
+        "name": "Galleta de agua chinchana",
+        "description": "Ricas y crujientes.",
+        "price": 6.00
+      }
+    ]
+  }
+  
