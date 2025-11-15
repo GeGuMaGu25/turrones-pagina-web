@@ -1,6 +1,10 @@
 [
     { "id": "calderon",   "sku": "calderon",   "name": "Turrón Tradicional Calderón 900gr",     "price_cents": 2300, "currency": "PEN", "stock": 25 },
     { "id": "joel",   "sku": "joel",   "name": "Turrón Tradicional Joel 900gr","price_cents": 2300, "currency": "PEN", "stock": 18 },
-    { "id": "galleta", "sku": "galleta", "name": "Galleta de Agua Chinchana",  "price_cents": 600, "currency": "PEN", "stock": 12 }
+    { "id": "galleta", "sku": "galleta", "name": "Galleta de Agua Chinchana",  "price_cents": 600, "currency": "PEN", "stock": 12 },
+    { "id": "calderon2", "sku": "calderon2", "name": "Turrón Tradicional Calderón 500gr",  "price_cents": 1300, "currency": "PEN", "stock": 12 },
+    { "id": "minicalderon", "sku": "minicalderon", "name": "Turrón Tradicional Calderón 70gr",  "price_cents": 300, "currency": "PEN", "stock": 12 },
+    { "id": "calderonajonjoli", "sku": "calderonajonjoli", "name": "Turrón de Ajonjolí Calderón 450gr",  "price_cents": 1300, "currency": "PEN", "stock": 12 },
+    { "id": "minicalderonajonjoli", "sku": "minicalderonajonjoli", "name": "Turrón de Ajonjolí Calderón 70gr",  "price_cents": 300, "currency": "PEN", "stock": 12 }
   ]
   

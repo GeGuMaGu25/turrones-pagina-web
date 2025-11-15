@@ -90,6 +90,58 @@
                         </div>
                     </div>
                 </article>
+
+                <!--Aca va el producto 4-->
+                <article class="card">
+                    <img src="calderon.png" alt="" />
+                    <div class="card-body">
+                        <h3>Turrón Tradicional Calderón 500gr</h3>
+                        <p>La misma calidad, en una presentación más pequeña.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 13.00</span>
+                            <button class="btn small" data-sku="calderon2" data-product="Turrón Tradicional Calderón 500gr" data-price="13.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Aca va el producto 5-->
+                <article class="card">
+                    <img src="minicalderon.png" alt="" />
+                    <div class="card-body">
+                        <h3>Turrón Tradicional Calderón 70gr</h3>
+                        <p>Ideal para antojos rápidos o regalos.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 3.00</span>
+                            <button class="btn small" data-sku="minicalderon" data-product="Turrón Tradicional Calderón 70gr" data-price="3.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Aca va el producto 6-->
+                <article class="card">
+                    <img src="calderonajonjoli.png" alt="" />
+                    <div class="card-body">
+                        <h3>Turrón de Ajonjolí Calderón 450gr</h3>
+                        <p>Con el toque especial de ajonjolí tostado.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 13.00</span>
+                            <button class="btn small" data-sku="calderonajonjoli" data-product="Turrón de Ajonjolí Calderón 450gr" data-price="13.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!--Aca va el producto 7-->
+                <article class="card">
+                    <img src="minicalderon2.png" alt="" />
+                    <div class="card-body">
+                        <h3>Turrón de Ajonjolí Calderón 70gr</h3>
+                        <p>La versión mini con ajonjolí.</p>
+                        <div class="price-row">
+                            <span class="price">S/ 3.00</span>
+                            <button class="btn small" data-sku="minicalderonajonjoli" data-product="Turrón de Ajonjolí Calderón 70gr" data-price="3.00">Añadir</button>
+                        </div>
+                    </div>
+                </article>
             </div>
         </section>
 
@@ -135,6 +187,32 @@
             </form>
         </section>
     </main>
+
+    <div id="cartOverlay" class="cart-overlay" hidden>
+        <div class="cart-panel">
+            <header class="cart-panel__header">
+                <h2>Tu carrito</h2>
+                <button id="cartClose" class="cart-close" aria-label="Cerrar carrito">&times;</button>
+            </header>
+
+            <div id="cartEmpty" class="cart-empty">
+                Tu carrito está vacío.
+            </div>
+
+            <ul id="cartItems" class="cart-items"></ul>
+
+            <div class="cart-summary">
+                <span>Total:</span>
+                <strong id="cartTotal">S/ 0.00</strong>
+            </div>
+
+            <div class="cart-actions">
+                <button id="cartCheckout" class="btn primary">
+                    Finalizar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>© <span id="year"></span> Turrones Yesi. Todos los derechos reservados.</p>

@@ -47,28 +47,44 @@ const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
   
 
 /*manejo del forms sin backend*/
-$("#contactoForm")?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const status = $("#formStatus");
-    const data = {
-      name: form.name.value.trim(),
-      email: form.email.value.trim(),
-      message: form.message.value.trim(),
-    };
-  
-    if (!data.name || !data.email || !data.message) {
-      status.textContent = "Por favor, completa todos los campos.";
-      return;
+$("#contactoForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const status = $("#formStatus");
+
+  const payload = {
+    nombre: form.name.value.trim(),
+    correo: form.email.value.trim(),
+    mensaje: form.message.value.trim(),
+  };
+
+  if (!payload.nombre || !payload.correo || !payload.mensaje) {
+    status.textContent = "Por favor, completa todos los campos.";
+    return;
+  }
+
+  status.textContent = "Enviando...";
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) {
+      throw new Error(data.error || "No se pudo enviar el mensaje");
     }
-  
-    status.textContent = "Enviando...";
-    setTimeout(() => {
-      status.textContent = "";
-      form.reset();
-      showSuccessToast("✅ ¡Tu mensaje fue enviado con éxito!");
-    }, 800);
-  });
+
+    status.textContent = "";
+    form.reset();
+    showSuccessToast("✅ ¡Tu mensaje fue enviado con éxito!");
+  } catch (err) {
+    console.error(err);
+    status.textContent = "Hubo un error al enviar el mensaje. Intenta más tarde";
+  }
+});
   
 
 
@@ -76,6 +92,38 @@ $("#contactoForm")?.addEventListener('submit', (e) => {
 
 // estado del carrito (sku -> qty)
 const cartMap = new Map();
+
+//info de producto: sku -> { name, price }
+const PRODUCTS_INFO = {
+  calderon: {
+    name: "Turrón Tradicional Calderón 900gr",
+    price: 23.0,
+  },
+  joel: {
+    name: "Turrón Tradicional Joel 900gr",
+    price: 23.0,
+  },
+  galleta: {
+    name: "Galleta de Agua Chinchana",
+    price: 6.0,
+  },
+  calderon2: {
+    name: "Turrón Tradicional Calderón 500gr",
+    price: 13.0,
+  },
+  minicalderon: {
+    name: "Turrón Tradicional Calderón 70gr",
+    price: 3.0,
+  },
+  calderonajonjoli: {
+    name: "Turrón de Ajonjolí Calderón 450gr",
+    price: 13.0,
+  },
+  minicalderonajonjoli: {
+    name: "Turrón de Ajonjolí Calderón 70gr",
+    price: 3.0,
+  },
+};
 
 // contador visual que ya tenías
 const cart = {
@@ -89,44 +137,123 @@ function updateCartCount(){
 
 // Delegación de eventos: un solo listener para todos los "Añadir"
 
+//panel del carrito (overlay)
+const cartOverlay = $("#cartOverlay");
+const cartItemsList = $("#cartItems");
+const cartTotalEl = $("#cartTotal");
+const cartEmptyEl = $("#cartEmpty");
+const cartCheckoutBtn = $("#cartCheckout");
+const cartCloseBtn = $("#cartClose");
 
-// Botón para finalizar por WhatsApp (si no existe, lo creamos)
-let payBtn = document.querySelector('#payBtn');
-if (!payBtn) {
-  payBtn = document.createElement('button');
-  payBtn.id = 'payBtn';
-  payBtn.className = 'btn primary';
-  payBtn.textContent = 'Finalizar por WhatsApp';
-  document.querySelector('#productos .section-head')?.appendChild(payBtn);
+function formatMoney(value) {
+  return `S/ ${value.toFixed(2)}`;
 }
 
-payBtn.addEventListener('click', async () => {
-  if (cartMap.size === 0) return alert('Tu carrito está vacío');
+function renderCart() {
+  if (!cartItemsList || !cartTotalEl || !cartEmptyEl) return;
 
-  // arma items para el backend
+  cartItemsList.innerHTML = "";
+
+  if (cartMap.size === 0) {
+    cartEmptyEl.style.display = "block";
+    cartTotalEl.textContent = formatMoney(0);
+    return;
+  }
+
+  cartEmptyEl.style.display = "none";
+
+  let total = 0;
+
+  for (const [sku, qty] of cartMap.entries()) {
+    const info = PRODUCTS_INFO[sku] || { name: sku, price: 0 };
+    const lineTotal = info.price * qty;
+    total += lineTotal;
+
+    const li = document.createElement("li");
+    li.className = "cart-item";
+    li.innerHTML = `
+      <div class="cart-item__info">
+        <span class="cart-item__name">${info.name}</span>
+        <span class="cart-item__price">${formatMoney(info.price)} x ${qty}</span>
+      </div>
+      <div class="cart-item__total">${formatMoney(lineTotal)}</div>
+    `;
+    cartItemsList.appendChild(li);
+  }
+
+  cartTotalEl.textContent = formatMoney(total);
+}
+
+function openCart() {
+  if (!cartOverlay) return;
+  renderCart();
+  cartOverlay.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function closeCart() {
+  if (!cartOverlay) return;
+  cartOverlay.hidden = true;
+  document.body.style.overflow = "";
+}
+
+//abrir - cerrar carrito
+$("#cartBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  openCart();
+});
+
+cartCloseBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
+  closeCart();
+});
+
+//cerrar carrito al hacer clic fuera del panel
+cartOverlay?.addEventListener("click", (e) => {
+  if (e.target === cartOverlay) closeCart();
+});
+
+//checkout desde el panel
+cartCheckoutBtn?.addEventListener("click", async () => {
+  if (cartMap.size === 0) {
+    alert("Tu carrito está vacío");
+    return;
+  }
+
   const items = [];
   for (const [id, qty] of cartMap.entries()) items.push({ id, qty });
 
   try {
     const resp = await fetch(`${API_BASE}/api/orders/checkout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items,
-          customer: {
-            name: document.querySelector('#name')?.value || '',
-            phone: document.querySelector('#phone')?.value || ''
-          }
-        })
-      });      
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items,
+        customers: {
+          name: document.querySelector("#name")?.value || "",
+          phone: document.querySelector("#phone")?.value || "",
+        },
+      }),
+    });
+
     const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || 'Error en checkout');
-    window.location.href = data.whatsappUrl; // redirige a WhatsApp
+    if (!resp.ok) throw new Error(data.error || "Error en checkout");
+
+    //vaciar carrito
+    cartMap.clear();
+    cart.count = 0;
+    updateCartCount();
+    renderCart();
+
+    //redirigir a wsp
+    window.location.href = data.whatsappUrl;
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    alert(err.message || "No se pudo completar el pedido");
   }
-});
+})
+
+
 
 /* ====== Mini Toast de confirmación ====== */
 function showToast(message) {
@@ -179,6 +306,7 @@ document.querySelector("#productos")?.addEventListener("click", (e) => {
     // mostrar mensaje con nombre del producto
     const cardTitle = btn.closest(".card")?.querySelector("h3")?.textContent?.trim();
     showToast(`🛒 ${cardTitle || "Producto"} añadido al carrito`);
+    renderCart();
   });
   
 // ==== Mensaje flotante de éxito (toast) ====
