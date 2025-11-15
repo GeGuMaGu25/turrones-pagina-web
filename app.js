@@ -165,8 +165,8 @@ function renderCart() {
   let total = 0;
 
   for (const [sku, qty] of cartMap.entries()) {
-    const info = PRODUCTS_INFO[sku] || { name: sku, price: 0 };
-    const lineTotal = info.price * qty;
+    const info = PRODUCTS_INFO[sku] || { name: item.name || sku, price: item.price || 0 };
+    const lineTotal = info.price * item.qty;
     total += lineTotal;
 
     const li = document.createElement("li");
@@ -174,7 +174,7 @@ function renderCart() {
     li.innerHTML = `
       <div class="cart-item__info">
         <span class="cart-item__name">${info.name}</span>
-        <span class="cart-item__price">${formatMoney(info.price)} x ${qty}</span>
+        <span class="cart-item__price">${formatMoney(info.price)} x ${item.qty}</span>
       </div>
       <div class="cart-item__total">${formatMoney(lineTotal)}</div>
     `;
@@ -221,7 +221,7 @@ cartCheckoutBtn?.addEventListener("click", async () => {
   }
 
   const items = [];
-  for (const [id, qty] of cartMap.entries()) items.push({ id, qty });
+  for (const [id, item] of cartMap.entries()) items.push({ id, qty: item.qty});
 
   try {
     const resp = await fetch(`${API_BASE}/api/orders/checkout`, {
@@ -229,7 +229,7 @@ cartCheckoutBtn?.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         items,
-        customers: {
+        customer: {
           name: document.querySelector("#name")?.value || "",
           phone: document.querySelector("#phone")?.value || "",
         },
@@ -291,23 +291,30 @@ function showToast(message) {
     }, 2500);
   }
   
-// === CARRITO + TOAST UNIFICADO ===
+// === CARRITO + TOAST UNIFICADO (con nombre y precio) ===
 document.querySelector("#productos")?.addEventListener("click", (e) => {
-    const btn = e.target.closest('.btn.small[data-sku]');
-    if (!btn) return; // no es el botón de añadir
-  
-    const sku = btn.dataset.sku?.trim();
-    if (!sku) return;
-  
-    // suma 1 del producto
-    cartMap.set(sku, (cartMap.get(sku) || 0) + 1);
-    cart.add(1); // ✅ solo una vez
-  
-    // mostrar mensaje con nombre del producto
-    const cardTitle = btn.closest(".card")?.querySelector("h3")?.textContent?.trim();
-    showToast(`🛒 ${cardTitle || "Producto"} añadido al carrito`);
-    renderCart();
-  });
+  const btn = e.target.closest(".btn.small[data-sku]");
+  if (!btn) return; // no es el botón de añadir
+
+  const sku = btn.dataset.sku?.trim();
+  if (!sku) return;
+
+  const name =
+    btn.closest(".card")?.querySelector("h3")?.textContent?.trim() ||
+    "Producto";
+
+  const price = parseFloat(btn.dataset.price || "0"); // viene de data-price
+
+  const current = cartMap.get(sku) || { qty: 0, name, price };
+  current.qty += 1;
+  cartMap.set(sku, current);
+
+  cart.add(1);
+
+  showToast(`🛒 ${name} añadido al carrito`);
+});
+
+
   
 // ==== Mensaje flotante de éxito (toast) ====
 function showSuccessToast(msg) {
