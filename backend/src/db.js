@@ -3,14 +3,22 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 
-// 1) Carpeta por defecto para la DB (útil en hosting)
+// 1) Ruta base por defecto (carpeta ./data dentro del proyecto)
 const DEFAULT_DIR = path.resolve(process.cwd(), "data");
-if (!fs.existsSync(DEFAULT_DIR)) fs.mkdirSync(DEFAULT_DIR, { recursive: true });
 
-// 2) Permite configurar la ruta por ENV (p.ej. /data/turrones.sqlite en Railway con Volumen)
+// 2) Ruta final de la base de datos (puede venir de ENV)
 const DB_PATH = process.env.SQLITE_PATH || path.join(DEFAULT_DIR, "turrones.sqlite");
+
+// 3) Asegurar que exista la carpeta donde va la DB (tanto si es ./data como /data, etc.)
+const DB_DIR = path.dirname(DB_PATH);
+if (!fs.existsSync(DB_DIR)) {
+  fs.mkdirSync(DB_DIR, { recursive: true });
+}
+
+// 4) Crear/abrir la base de datos
 export const db = new Database(DB_PATH);
-console.log('📦 Usando DB en:', DB_PATH);
+console.log("📦 Usando DB en:", DB_PATH);
+
 
 // Ajustes recomendados para producción
 db.pragma("journal_mode = WAL");      // mejor concurrencia
