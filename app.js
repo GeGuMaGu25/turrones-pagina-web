@@ -164,17 +164,20 @@ function renderCart() {
 
   let total = 0;
 
-  for (const [sku, qty] of cartMap.entries()) {
-    const info = PRODUCTS_INFO[sku] || { name: item.name || sku, price: item.price || 0 };
-    const lineTotal = info.price * item.qty;
+  for (const [sku, item] of cartMap.entries()) {
+    const name = item.name || PRODUCTS_INFO[sku]?.name || sku;
+    const price = item.price ?? PRODUCTS_INFO[sku]?.price ?? 0;
+    const qty = item.qty ?? 0;
+
+    const lineTotal = price * qty;
     total += lineTotal;
 
     const li = document.createElement("li");
     li.className = "cart-item";
     li.innerHTML = `
       <div class="cart-item__info">
-        <span class="cart-item__name">${info.name}</span>
-        <span class="cart-item__price">${formatMoney(info.price)} x ${item.qty}</span>
+        <span class="cart-item__name">${name}</span>
+        <span class="cart-item__price">${formatMoney(price)} x ${qty}</span>
       </div>
       <div class="cart-item__total">${formatMoney(lineTotal)}</div>
     `;
@@ -183,6 +186,7 @@ function renderCart() {
 
   cartTotalEl.textContent = formatMoney(total);
 }
+
 
 function openCart() {
   if (!cartOverlay) return;
@@ -198,6 +202,7 @@ function closeCart() {
 }
 
 //abrir - cerrar carrito
+const cartBtn = $("#cartBtn");
 $("#cartBtn").addEventListener("click", (e) => {
   e.preventDefault();
   openCart();
