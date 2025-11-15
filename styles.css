@@ -300,6 +300,11 @@ body { padding-top: var(--header-h); }
 section { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 /* ==== PANEL DEL CARRITO ==== */
+
+.cart-overlay[hidden] {
+  display: none !important;
+}
+
 .cart-overlay {
   position: fixed;
   inset: 0;
